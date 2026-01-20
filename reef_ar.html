@@ -14,13 +14,34 @@
     </style>
   </head>
   <body>
-    <model-viewer 
-      src="artificial_reef.glb"
-      ar
-      ar-modes="scene-viewer quick-look webxr"
-      camera-controls
-      shadow-intensity="1"
-      placement="floor">
+  <model-viewer 
+  src="artificial_reef.glb"
+  ar
+  ar-modes="quick-look webxr scene-viewer"
+  camera-controls
+  shadow-intensity="1"
+  placement="floor"
+  exposure="1"
+  environment-image="neutral"
+>
+  <button slot="ar-button" style="
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 14px 20px;
+    border-radius: 999px;
+    border: none;
+    background: black;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+  ">
+    View in AR
+  </button>
+</model-viewer>
+
     </model-viewer>
   </body>
 </html>
+
