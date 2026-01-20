@@ -14,8 +14,9 @@
     </style>
   </head>
   <body>
-  <model-viewer 
+<model-viewer
   src="artificial_reef.glb"
+  ios-src="artificial_reef.usdz"
   ar
   ar-modes="quick-look webxr scene-viewer"
   camera-controls
@@ -24,12 +25,13 @@
   exposure="1"
   environment-image="neutral"
 >
+
   <button slot="ar-button" style="
     position: absolute;
     bottom: 24px;
     left: 50%;
     transform: translateX(-50%);
-    padding: 14px 20px;
+    padding: 14px 28px;
     border-radius: 999px;
     border: none;
     background: black;
@@ -39,8 +41,9 @@
   ">
     View in AR
   </button>
+
 </model-viewer>
-  </body>
-</html>
+
+
 
 
