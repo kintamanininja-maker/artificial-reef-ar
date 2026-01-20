@@ -1,49 +1,103 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Artificial Reef AR</title>
+
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+
     <style>
-      body { margin: 0; background: #f2f2f2; }
-      model-viewer {
-        width: 100vw;
-        height: 100vh;
+      html, body { margin:0; height:100%; background:#f2f2f2; }
+      model-viewer { width:100vw; height:100vh; }
+
+      /* Big, always-visible button */
+      #arbtn{
+        position: fixed;
+        left: 50%;
+        bottom: 24px;
+        transform: translateX(-50%);
+        padding: 14px 22px;
+        border-radius: 999px;
+        border: 0;
+        background: #000;
+        color: #fff;
+        font-size: 16px;
+        font-weight: 600;
+        z-index: 9999;
+        cursor: pointer;
+      }
+
+      #hint{
+        position: fixed;
+        left: 50%;
+        bottom: 78px;
+        transform: translateX(-50%);
+        background: rgba(0,0,0,0.65);
+        color: #fff;
+        padding: 8px 12px;
+        border-radius: 10px;
+        font-size: 13px;
+        z-index: 9999;
+        display:none;
+        max-width: 90vw;
+        text-align:center;
       }
     </style>
   </head>
+
   <body>
-<model-viewer
-  src="artificial_reef.glb"
-  ios-src="artificial_reef.usdz"
-  ar
-  ar-modes="quick-look webxr scene-viewer"
-  camera-controls
-  shadow-intensity="1"
-  placement="floor"
-  exposure="1"
-  environment-image="neutral"
->
+    <model-viewer
+      id="mv"
+      src="./artificial_reef.glb"
+      ios-src="./artificial_reef.usdz"
+      camera-controls
+      ar
+      ar-modes="quick-look scene-viewer webxr"
+      exposure="1"
+      environment-image="neutral"
+      shadow-intensity="1"
+      alt="Artificial reef model">
+    </model-viewer>
 
-  <button slot="ar-button" style="
-    position: absolute;
-    bottom: 24px;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 14px 28px;
-    border-radius: 999px;
-    border: none;
-    background: black;
-    color: white;
-    font-size: 16px;
-    font-weight: 600;
-  ">
-    View in AR
-  </button>
+    <div id="hint"></div>
+    <button id="arbtn" type="button">View in AR</button>
 
-</model-viewer>
+    <script>
+      const mv = document.getElementById('mv');
+      const btn = document.getElementById('arbtn');
+      const hint = document.getElementById('hint');
 
+      function isIOS() {
+        return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+      }
 
+      function show(msg){
+        hint.textContent = msg;
+        hint.style.display = 'block';
+      }
 
+      btn.addEventListener('click', () => {
+        // iPhone/iPad: most reliable is to open the .usdz directly
+        if (isIOS()) {
+          window.location.href = './artificial_reef.usdz';
+          return;
+        }
 
+        // Other devices: let model-viewer try WebXR / Scene Viewer
+        if (mv && mv.canActivateAR) {
+          mv.activateAR();
+        } else {
+          show('AR not supported on this device/browser. Try Chrome on Android or Safari on iPhone.');
+        }
+      });
+
+      // Optional: if AR isn’t supported, still keep button but show a hint
+      mv.addEventListener('load', () => {
+        if (!mv.canActivateAR) {
+          show('3D view works here. For AR: iPhone (Safari) or Android (Chrome).');
+        }
+      });
+    </script>
+  </body>
+</html>
